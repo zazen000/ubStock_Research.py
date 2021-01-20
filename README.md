@@ -8,18 +8,18 @@ Another Stock Evaluation Module
 
     class CorrelatedStockResearch:
 
-    Ultimately, winnows 8500+ stock symbols down to 10 pairs of stocks with a high degree of non-correlation.
-    Corrolated stocks move together (same or opposite direction). Uncorrolated stocks move independently of
-    each other. Those stocks are then run through a recommendation algorithm and sorted by highest recommendation score.
-    see:  https://www.investopedia.com/articles/financial-theory/09/uncorrelated-assets-diversification.asp
+        Ultimately, winnows 8500+ stock symbols down to 10 pairs of stocks with a high degree of non-correlation.
+        Corrolated stocks move together (same or opposite direction). Uncorrolated stocks move independently of
+        each other. Those stocks are then run through a recommendation algorithm and sorted by highest recommendation score.
+        see:  https://www.investopedia.com/articles/financial-theory/09/uncorrelated-assets-diversification.asp
 
-    All data storage is through MongoDb. I have isolated the MongoDb specific code using #.... at the start of the code
-    section and ##.... at the end. Replace these code blocks with your own data storage code if necessary.
+        All data storage is through MongoDb. I have isolated the MongoDb specific code using #.... at the start of the code
+        section and ##.... at the end. Replace these code blocks with your own data storage code if necessary.
 
-    Each function below builds upon the previous function, except get_info and get_dividend. These two functions are used
-    independently by several of the other functions.
+        Each function below builds upon the previous function, except get_info and get_dividend. These two functions are used
+        independently by several of the other functions.
 
-    Notice that as the number of symbols decreases as we progress through this class, the amount of data collected increases.
+        Notice that as the number of symbols decreases as we progress through this class, the amount of data collected increases.
 
     Function List:
 
