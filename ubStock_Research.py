@@ -24,7 +24,7 @@ def main():
     All data storage is through MongoDb. I have isolated the MongoDb specific code using #.... at the start of the code
     section and ##.... at the end. Replace these code blocks with your own data storage code if necessary.
 
-    The output of the functions becomes the input for the following unction, except get_info and get_dividend. These two 
+    The output of a function becomes the input for the following function, except get_info and get_dividend. These two 
     functions are used independently by several of the other functions.
 
     Notice that as the number of symbols decreases as we progress through this class, the amount of data collected increases.
