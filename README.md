@@ -17,7 +17,7 @@ Another Stock Evaluation Module
     section and ##.... at the end. Replace these code blocks with your own data storage code if necessary.
 
     Each function below builds upon the previous function, except get_info and get_dividend. These two functions are used
-    independently by several other functions.
+    independently by several of the other functions.
 
     Notice that as the number of symbols decreases as we progress through this class, the amount of data collected increases.
 
