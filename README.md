@@ -1,4 +1,4 @@
-# ubStock_research
+# ubStock_Research
 Another Stock Evaluation Module
 
     ubStock_Research, yet another stock research module
