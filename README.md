@@ -8,7 +8,7 @@ Another Stock Evaluation Module
 
     class CorrelatedStockResearch:
 
-    Ultimately, winnows 8500 stock symbols down to 10 pairs of stocks with a high degree of non-correlation.
+    Ultimately, winnows 8500+ stock symbols down to 10 pairs of stocks with a high degree of non-correlation.
     Corrolated stocks move together (same or opposite direction). Uncorrolated stocks move independently of
     each other. Those stocks are then run through a recommendation algorithm and sorted by highest recommendation score.
     see:  https://www.investopedia.com/articles/financial-theory/09/uncorrelated-assets-diversification.asp
