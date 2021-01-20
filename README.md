@@ -1,7 +1,7 @@
 # ubStock_Research.py
 Another Stock Evaluation Module
 
-    ubStock_Research, yet another stock research module from
+    ubStock_Research.py
     Utility_Belt Designs, Tacoma, WA
     www.pythonOver60.rocks
     @author: ZennDogg, with a lot of help for find_stock_correlation from outside sources
