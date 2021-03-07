@@ -9,9 +9,7 @@ Another Stock Evaluation Module
     python 3.9.
     
     
-    class StockSearchSupport:
-    
-        Contains support functions for class CorrelatedStockResearch.
+    class StockSearchSupport: Contains support functions for class CorrelatedStockResearch.
     
     Function List:
     
