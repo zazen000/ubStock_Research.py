@@ -162,7 +162,7 @@ class CorrelatedStockResearch(StockSearchSupport):
     def stocks_list_under(amount):
         """
         Retrieves a complete list of stocks under a dollar amount in price
-        from AssembleAllStockSymbols(), then retrieves info and dividends data.
+        from gather_all_stock_symbols(), then retrieves info and dividends data.
 
             Total number of stocks under 5 dollars = 893
             Number of those stocks with dividends = 128
@@ -270,7 +270,6 @@ class CorrelatedStockResearch(StockSearchSupport):
         days = ticker.history( interval="1d", start=start, end=today ).shape[0]
         total = None
 
-        # ---- Start correlation algorithm ------------------------------------------------------------
         for symbol in syms:
             ticker = yf.Ticker( symbol )
             close = ticker.history( interval="1d", start=start, end=today )[['Close']].pct_change( 1 )
@@ -293,12 +292,10 @@ class CorrelatedStockResearch(StockSearchSupport):
             corr_table['abs_value'] = np.abs( corr_table['value'] )
             highest_corr = corr_table.sort_values( "abs_value", ascending=True ).to_dict()
 
-        ##---------------------------------------------------------------------------------------------
-
         df = pd.DataFrame( highest_corr )
 
         df.sort_values( by='abs_value', ascending=True, inplace=True )  # sort stock pairs in ascending absolute values
-        my_stocks = df.head( 10 )  # Top ten uncorrelated stock pairs (closest to 0)
+        my_stocks = df.head( 10 )                                       # Top ten uncorrelated stock pairs (closest to 0)
 
         # prepare data and insert to MongoDb...............................
         for row in my_stocks.iterrows():
@@ -328,14 +325,14 @@ class CorrelatedStockResearch(StockSearchSupport):
         my_set = set()
 
         for _d in data:
-            my_set.add( _d['stock1'] )  # since an individual stock can be in more than one
+            my_set.add( _d['stock1'] )  # since an individual stock may be in more than one
             my_set.add( _d["stock2"] )  # stock pair, we will want to remove any duplicates
 
         for symbol in my_set:
-            info = dict( get_info( symbol ) )  # gets stock info in dictionary format
+            info = dict( get_info( symbol ) )      # gets stock info in dictionary format
             note = dict( get_dividend( symbol ) )  # gets stock dividend data in dictionary format
-            plug = (symbol, info, note)  # assemble the data entry
-            my_list.append( plug )  # append the entry to my_list
+            plug = (symbol, info, note)            # assemble the data entry
+            my_list.append( plug )                 # append the entry to my_list
 
         # create a dataframe for data massaging
         df = pd.DataFrame( my_list, columns=['symbol', 'info', 'dividend'] )
@@ -383,11 +380,11 @@ class CorrelatedStockResearch(StockSearchSupport):
             hist = hist[:].values.tolist()
 
             for row in hist:
-                date = str( row[5] )
-                open = row[0]
-                high = row[1]
-                low = row[2]
-                close = row[3]
+                date   = str( row[5] )
+                open   = row[0]
+                high   = row[1]
+                low    = row[2]
+                close  = row[3]
                 volume = row[4]
 
                 history.append( {
@@ -410,7 +407,7 @@ class CorrelatedStockResearch(StockSearchSupport):
 
     def recommend_algorithm_symbols():
         """
-        Uses the 'all_stock_symbols' list of symbols and retrieves
+        Uses the 'gather_all_stock_symbols' list of symbols and retrieves
         the recommendation score (1-6) from finance.yahoo. Stocks
         with a score of 3 or better are saved.
 
@@ -552,15 +549,15 @@ class CorrelatedStockResearch(StockSearchSupport):
                 interval2 = self.interval_range( ep2 )
 
                 avg_div1 = (float( last_divs1['amount'] ) + float(
-                        next_divs1['amount'] )) / 2  # usually, the dividend amount won't be the same each time
+                        next_divs1['amount'] )) / 2                 # usually, the dividend amount won't be the same each time
                 avg_div2 = (float( last_divs2['amount'] ) + float(
-                        next_divs2['amount'] )) / 2  # therefore, I'm using the average of the two amounts
+                        next_divs2['amount'] )) / 2                 # therefore, I'm using the average of the two amounts
 
                 yearly_div1 = ep1 * avg_div1  # total yearly dividend payout = frequency of
                 yearly_div2 = ep2 * avg_div2  # dividends * the average dividend amount
 
                 divs = yearly_div1 + yearly_div2  # add yearly dividend amount of both symbols in stock pair
-                cloz = close1 + close2  # add closing price of both symbols in stock pair
+                cloz = close1 + close2            # add closing price of both symbols in stock pair
 
                 mixed_bag.add(
                         (dp1,
@@ -583,7 +580,7 @@ class CorrelatedStockResearch(StockSearchSupport):
                            )
 
         df.sort_values( by='d/p ratio', ascending=False,
-                        inplace=True )             # sort by column d/p ratio from low to high. The lower
+                        inplace=True )             # sort by column dividend/price ratio from low to high. The lower
         pd.set_option( 'display.max_rows', None )  # the ratio, the better the bang for your buck
         pd.set_option( 'display.max_columns', None )
         pd.set_option( 'display.width', 1000 )
