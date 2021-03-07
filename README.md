@@ -8,6 +8,7 @@ Another Stock Evaluation Module
     zenndogg@outlook.com
     python 3.9.
     
+    
     class StockSearchSupport:
     
         Contains support functions for class CorrelatedStockResearch.
@@ -20,6 +21,7 @@ Another Stock Evaluation Module
         -  interval_range               -  Transforms the return of find_interval into a single digit integer
         -  gather_all_stock_symbols     -  Finds stock symbols from the Dow, SP500, NASDAQ and others. Removes all duplicates
 
+    
     class CorrelatedStockResearch:
 
         Ultimately, prunes 8500+ stock symbols down to 10 pairs of stocks with a high degree of non-correlation.
