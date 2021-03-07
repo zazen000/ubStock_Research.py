@@ -35,7 +35,6 @@ Another Stock Evaluation Module
 
     Function List:
 
-        -  gather_all_stock_symbols     -  Finds stock symbols from the Dow, SP500, NASDAQ and others. Removes all duplicates
         -  stocks_list_under(amount)    -  Retrieves a complete list of stocks under a dollar(float) amount from gather_all_stock_symbols
         -  find_stock_correlation       -  Generates a list of correlated stocks pairs from stocks_list_under(amount)
         -  correlated_stock_data        -  Retrieves info and dividend data for each individual stock in the correlated stock pair
