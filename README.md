@@ -7,6 +7,18 @@ Another Stock Evaluation Module
     @author: ZennDogg, with a lot of help for find_stock_correlation from outside sources
     zenndogg@outlook.com
     python 3.9.
+    
+    class StockSearchSupport:
+    
+        Contains support functions for class CorrelatedStockResearch.
+    
+    Function List:
+    
+        -  get_info                     -  Retrieves stock information from yfinance. Used by several functions
+        -  get_dividend                 -  Retrieves dividend information from yfinance. Used by several functions
+        -  find_interval                -  Determines the interval between dividend payments (in months)
+        -  interval_range               -  Transforms the return of find_interval into a single digit integer
+        -  gather_all_stock_symbols     -  Finds stock symbols from the Dow, SP500, NASDAQ and others. Removes all duplicates
 
     class CorrelatedStockResearch:
 
@@ -18,10 +30,8 @@ Another Stock Evaluation Module
         All data storage is through MongoDb. I have isolated the MongoDb specific code using #.... at the start of the code
         section and ##.... at the end. Replace these code blocks with your own data storage code if necessary.
 
-        The output of a function becomes the input for the following function, except get_info and get_dividend. These two 
-        functions are used independently by several of the other functions.
-
-        Notice that as the number of symbols decreases as we progress through this class, the amount of data collected increases.
+        The output of a function becomes the input for the following function.  Notice that as the number of symbols decreases 
+        as we progress through this class, the amount of data collected increases.
 
     Function List:
 
@@ -33,5 +43,4 @@ Another Stock Evaluation Module
         -  recommend_algorithm_symbols  -  Recommendation algorithm for the stocks. Returns 3 or better on a scale: 1-6
         -  compare_recommended_symbols  -  Compares the stock symbols in the corr_pair with those from recommend_algorithm_symbols
         -  find_best_stock_pair         -  Uses the yearly dividend payout divided by total stock prices ratio to determine best value
-        -  get_info                     -  Retrieves stock information from yfinance. Used by several functions
-        -  get_dividend                 -  Retrieves dividend information from yfinance. Used by several functions
+       
