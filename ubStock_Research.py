@@ -9,6 +9,8 @@ import yfinance as yf
 from numba import jit
 from pymongo import MongoClient
 from yahoo_fin import stock_info as si
+from typing import Union
+
 
 
 def main():
@@ -63,32 +65,38 @@ client = MongoClient( 'localhost', 27017 )
 
 class StockSearchSupport():
 
-    def get_info(self, symbol):
+    def get_info(self, symbol: str)->str:
         """
         Retrieves stock information from yfinance.
         Contains 122 elements of data.
 
-            symbol : stock symbol
-
+        :param symbol: stock symbol
         """
 
-        ticker = yf.Ticker( symbol )
+        ticker = yf.Ticker( symbol: str)->str:
         return ticker.info
+    
 
     def get_dividend(self, symbol):
         """
         Retrieves dividend information from yfinance.
         Contains 121 elements of data.
 
-            symbol : stock symbol
-
+        :param symbol: stock symbol
         """
 
         ticker = yf.Ticker( symbol )
         return ticker.dividends
+    
 
     @jit( nopython=True )
     def find_interval(self, var, type):
+        """
+        Calculates interval between dividend payments
+        
+        :param var: list of dividend dates
+        """
+        
         count = len( var ) - 3
         last_elem = var[count]
         freq_elem = var[count - 1]
@@ -98,23 +106,32 @@ class StockSearchSupport():
         days = _temp.astype( 'timedelta64[D]' )
         interval = int( (days / np.timedelta64( 1, 'D' )) / 30 )
         return interval
+    
 
     @jit( nopython=True )
     def interval_range(self, var):
-        if var == 3:      # sometimes the interval between dividends are a little more, or less,
-            interval = 4  # than 90, 180 days because of weekends and holidays.
-        elif var == 6:    # so if the interval falls between these ranges, the interval is
-            interval = 2  # assigned an integer
+        """
+        Sometimes the interval between dividends are a little more, or less,
+        than 90, 180 days because of weekends and holidays.
+        If the interval falls between these ranges, the interval is
+        assigned an integer
+        """
+        
+        if var == 3:
+            interval = 4
+        elif var == 6:
+            interval = 2
         else:
             interval = 1
         return interval
+    
 
     def gather_all_stock_symbols():
         """
         Retrieves all available stock symbols from
         yahoo-fin.stock_info(si) and then removes duplicates.
 
-            Total number of symbols = 9181.
+        Total number of symbols = 9181.
         """
 
         # ......... MongoDb initialization................................
@@ -158,16 +175,22 @@ class StockSearchSupport():
 
 
 class CorrelatedStockResearch(StockSearchSupport):
+    """
+    Class for determining stock pair correlation
+    """
 
-    def stocks_list_under(amount):
+    def stocks_list_under(amount: int | float)->Union[int | float]:
         """
         Retrieves a complete list of stocks under a dollar amount in price
         from gather_all_stock_symbols(), then retrieves info and dividends data.
 
             Total number of stocks under 5 dollars = 893
             Number of those stocks with dividends = 128
+            
+        :param amount: Dollar amount of upper search limit
 
-        ### WARNING ###
+        ################## WARNING ##################
+        
         This function takes about 8 hours to run on my system
         - Windows 10 Professional
         - AMD Ryzen 3800 CPU
@@ -242,6 +265,7 @@ class CorrelatedStockResearch(StockSearchSupport):
                         pass
                 except:
                     pass
+                
 
     def find_stock_correlation():
         """
@@ -251,8 +275,9 @@ class CorrelatedStockResearch(StockSearchSupport):
         Corrolated stocks move together (same or opposite direction). Uncorrolated stocks
         move independently of each other.
 
-            Number of stock pairs = 10
+        Total number of uncorrelated stock pairs = 10
         """
+        
         # ......... MongoDb initialization................................
         db = client['trading']
         col1 = db['div_stocks_under_5']
@@ -304,14 +329,16 @@ class CorrelatedStockResearch(StockSearchSupport):
             df3 = row[1]['abs_value']
             col2.insert_one( {'stock1': df1, 'stock2': df2, 'value': df3, } )
         ##.................................................................
+        
 
     def correlated_stock_data():
         """
         Retrieves info and dividend data for each individual
         stock in the correlated stock_pair collection.
 
-            Total number of symbols = 14
+        Total number of symbols = 14
         """
+        
         # ......... MongoDb initialization................................
         db = client['trading']
         col2 = db['stock_pair_corellated']
@@ -353,12 +380,14 @@ class CorrelatedStockResearch(StockSearchSupport):
 
             col1.insert_one( {'symbol': symbol, 'info': info, 'dividend': [my_divs]} )
         ##...................................................................
+        
 
     def correlated_stock_history(object):
         """
         Retrieves two years of history for each symbol in corr_stock_info,
         formats the data then updates the collection.
         """
+        
         # ......... MongoDb initialization................................
         db = client['trading']
         col1 = db['corr_stock_info']
@@ -404,6 +433,7 @@ class CorrelatedStockResearch(StockSearchSupport):
                              }
                              )
         ##................................................................
+        
 
     def recommend_algorithm_symbols():
         """
@@ -411,10 +441,11 @@ class CorrelatedStockResearch(StockSearchSupport):
         the recommendation score (1-6) from finance.yahoo. Stocks
         with a score of 3 or better are saved.
 
-            Total number of stocks with Recommendation Score greater than 3 = 3644
+        Total number of stocks with Recommendation Score greater than 3 = 3644
 
         May take up to 1 hour to run.
         """
+        
         # ......... MongoDb initialization................................
         db = client["trading"]
         col1 = db['all_stock_symbols']
@@ -458,14 +489,16 @@ class CorrelatedStockResearch(StockSearchSupport):
         # ...insert data to MongoDb.......................................
             col3.insert_one( {'symbol': key, 'recommend_value': value} )
         ##...............................................................
+        
 
     def compare_recommended_symbols():
         """
-        Compares the stock symbols in the corr_pair with
-        those from recommend_algorithm_symbols().
+        Compares the stock symbols in the correlated stock
+        pair with those from recommend_algorithm_symbols().
 
-            Total number of individual stocks from 14 (previous) in Recommended List = 4
+        Total number of individual stocks from 14 (previous) in Recommended List = 4
         """
+        
         # ......... MongoDb initialization................................
         db = client['trading']
         col1 = db['corr_symbol_recommendation']
@@ -493,6 +526,7 @@ class CorrelatedStockResearch(StockSearchSupport):
             ##.............................................................
             else:
                 print( f'{symbol} is not in the Recommendation List...' )
+                
 
     def find_best_stock_pair(self):
         """
@@ -503,6 +537,7 @@ class CorrelatedStockResearch(StockSearchSupport):
 
         May take an hour or more to run.
         """
+        
         # ......... MongoDb initialization................................
         db = client['trading']
         col1 = db['corr_symbol_recommendation']
@@ -592,8 +627,16 @@ class CorrelatedStockResearch(StockSearchSupport):
         print( "Sorted by best to worst value for your viewing pleasure." )
         print()
         print( df )
+        
 
-    def chosen_history(symbol):
+    def chosen_history(symbol: str)->str:
+        """
+        Retrieves stock symbol history data from
+        the database then plots to graph.
+        
+        :param symbol: Stock symbol
+        """
+        
         # ......... MongoDb initialization................................
         db = client['trading']
         col1 = db['corr_stock_info']
