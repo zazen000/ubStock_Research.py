@@ -6,7 +6,7 @@ Another Stock Evaluation Module
     www.pythonOver60.rocks
     @author: ZennDogg, with a lot of help for find_stock_correlation from outside sources
     zenndogg@outlook.com
-    python 3.9.
+    python 3.10
     
     
     class StockSearchSupport: Contains support functions for class CorrelatedStockResearch.
