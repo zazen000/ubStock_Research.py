@@ -18,7 +18,7 @@ def main():
     ubStock_Research, yet another stock research module
     Utility_Belt Designs, Tacoma, WA
     @author: ZennDogg, with a lot of help for find_stock_correlation from outside sources
-    python 3.9.
+    python 3.10.
 
 
     class StockSearchSupport: Contains support functions for class CorrelatedStockResearch.
@@ -29,7 +29,7 @@ def main():
         -  get_dividend                 -  Retrieves dividend information from yfinance. Used by several functions
         -  find_interval                -  Determines the interval between dividend payments (in months)
         -  interval_range               -  Transforms the return of find_interval into a single digit integer
-        -  gather_all_stock_symbols     -  Finds stock symbols from the Dow, SP500, NASDAQ and others. Removes all duplicates
+        -  gather_all_stock_symbols     -  Finds stock symbols from the Dow, SP500, NASDAQ and others.
 
 
     class CorrelatedStockResearch:
